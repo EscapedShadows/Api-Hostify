@@ -56,3 +56,18 @@ There are different versions for Windows and Linux. Although it would work with 
 ## So why did I create this project?
 
 Because I know what a pain it is to write a simple and clean API, making it work, bug fixing and then the system implementations, writing the documentation, maintaining the project and just cause I like free stuff lmao.
+
+---
+
+# Future Plans
+
+In the future, I plan on:
+- Adding a system to export all data of a bucket or of the entire API at once
+- Backups that can be configured
+- Idk I'm not good at planning.. I'm hungry
+
+---
+
+# Setup
+
+Please be patient, I'm lazy :3

@@ -108,6 +108,7 @@ def main():
         
         with open(f'buckets/{bucket}', 'w') as file:
             json.dump({"placeholder": "placeholder"}, file, indent=2)
+        file.close()
         
         return jsonify({"Status": "Success", "Code": "200", "Description": f"Bucket: {bucket} was Successfully created!"}, 200)
     

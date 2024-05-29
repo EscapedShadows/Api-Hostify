@@ -149,6 +149,25 @@
         .tabContent.active {
             display: block;
         }
+
+        .tree {
+            margin-left: 20px;
+        }
+
+        .tree ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+
+        .tree ul li:before {
+            content: "▸";
+            color: #0056b3;
+            margin-right: 5px;
+        }
+
+        .tree ul li {
+            margin: 5px 0;
+        }
     </style>
 </head>
 
@@ -162,16 +181,16 @@
     </div>
 
     <div class="sessionSelection">
-        <button id="bucket" class="selectionBtn" onclick="highlightButton('bucket')">Bucket</button>
-        <button id="bin" class="selectionBtn" onclick="highlightButton('bin')" disabled>Bin</button>
-        <button id="container" class="selectionBtn" onclick="highlightButton('container')" disabled>Container</button>
+        <button id="bucket" class="selectionBtn" onclick="selectSession('bucket')">Bucket</button>
+        <button id="bin" class="selectionBtn" onclick="selectSession('bin')" disabled>Bin</button>
+        <button id="container" class="selectionBtn" onclick="selectSession('container')">Container</button>
     </div>
 
     <select id="modeSelect">
-        <option>Create</option>
-        <option>Delete</option>
-        <option>Set</option>
-        <option>Get</option>
+        <option value="Create">Create</option>
+        <option value="Delete">Delete</option>
+        <option value="Set">Set</option>
+        <option value="Get">Get</option>
     </select>
 
     <div class="requestData">
@@ -193,16 +212,17 @@
     </div>
 
     <div class="endingDiv">
-        <p>API Hostify. A Free and Open-Source Project by <a href="https://escapedshadows.com">EscapedShadows</a> on <a
-                href="https://github.com/EscapedShadows/Api-Hostify">GitHub</a>.</p>
+        <p>API Hostify. A Free and Open-Source Project by <a href="https://escapedshadows.com">EscapedShadows</a> on <a href="https://github.com/EscapedShadows/Api-Hostify">GitHub</a>.</p>
     </div>
 
     <script>
+        let currentSession = 'bucket';
+
         document.getElementById('modeSelect').addEventListener('change', function () {
             console.log('Selected option:', this.value);
             document.getElementById("contentData").disabled = this.value !== "Set";
         });
-    
+
         function setMode(modeS) {
             const ipInput = document.getElementById('ip');
             if (modeS === 'local') {
@@ -210,12 +230,13 @@
                 ipInput.placeholder = 'Enter port';
             } else {
                 ipInput.value = '';
+               
                 ipInput.placeholder = 'Enter IP address';
             }
             console.log(`Mode set to: ${modeS}`);
             highlightButton(modeS);
         }
-    
+
         function highlightButton(buttonId) {
             const buttons = document.querySelectorAll('.selectionBtn');
             buttons.forEach(button => {
@@ -223,38 +244,92 @@
             });
             document.getElementById(buttonId).classList.add('selected');
         }
-    
+
+        function selectSession(session) {
+            currentSession = session;
+            document.getElementById('bucketData').disabled = session === 'container';
+
+            const modeSelect = document.getElementById('modeSelect');
+            if (session === 'container') {
+                // Disable Create and Delete options
+                modeSelect.querySelector('option[value="Create"]').disabled = true;
+                modeSelect.querySelector('option[value="Delete"]').disabled = true;
+                if (modeSelect.value === 'Create' || modeSelect.value === 'Delete') {
+                    modeSelect.value = 'Set'; // Default to Set if Create or Delete was selected
+                }
+                document.getElementById("contentData").disabled = false;
+            } else {
+                // Enable Create and Delete options
+                modeSelect.querySelector('option[value="Create"]').disabled = false;
+                modeSelect.querySelector('option[value="Delete"]').disabled = false;
+                document.getElementById("contentData").disabled = modeSelect.value !== 'Set';
+            }
+            highlightButton(session);
+        }
+
         function showTab(tabId) {
             const tabs = document.querySelectorAll('.tab');
             tabs.forEach(tab => {
                 tab.classList.remove('selected');
             });
             document.querySelector(`.tab[onclick="showTab('${tabId}')"]`).classList.add('selected');
-    
+
             const tabContents = document.querySelectorAll('.tabContent');
             tabContents.forEach(tabContent => {
                 tabContent.classList.remove('active');
             });
             document.getElementById(tabId).classList.add('active');
+
+            if (tabId === 'formattedTab') {
+                const jsonData = document.getElementById('jsonTab').innerText.trim();
+                if (jsonData) {
+                    try {
+                        const data = JSON.parse(jsonData);
+                        const formattedData = formatData(data);
+                        document.getElementById('formattedTab').innerHTML = formattedData;
+                    } catch (error) {
+                        document.getElementById('formattedTab').innerHTML = `<pre>Error: ${error.message}</pre>`;
+                    }
+                }
+            }
         }
-    
+
+        function formatData(data) {
+            let formatted = '<ul class="tree">';
+            for (let key in data) {
+                if (data.hasOwnProperty(key)) {
+                    formatted += `<li>${key}: `;
+                    if (typeof data[key] === 'object') {
+                        formatted += formatData(data[key]);
+                    } else {
+                        formatted += `${data[key]}</li>`;
+                    }
+                }
+            }
+            formatted += '</ul>';
+            return formatted;
+        }
+
         document.getElementById('send').addEventListener('click', function () {
             const ip = document.getElementById('ip').value;
             const mode = document.getElementById('modeSelect').value.toLowerCase();
             const token = document.getElementById('tokenData').value;
             const bucket = document.getElementById('bucketData').value;
             const content = document.getElementById('contentData').value;
-    
+
             let requestData = {
                 token: token,
-                request: mode,
-                bucket: bucket
+                request: mode
             };
-    
+
+            if (currentSession !== 'container') {
+                requestData.bucket = bucket;
+            }
+
             if (mode === 'set') {
                 requestData['content'] = content;
             }
-    
+
             fetch(`http://${ip}`, {
                 method: 'POST',
                 headers: {
@@ -265,12 +340,12 @@
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('jsonTab').innerText = JSON.stringify(data, null, 2);
+
                     if (mode === 'get') {
-                        let formattedOutput = '';
-                        for (const key in data) {
-                            formattedOutput += `${key}: ${data[key]}\n`;
-                        }
-                        document.getElementById('formattedTab').innerText = formattedOutput;
+                        const formattedData = Array.isArray(data)
+                            ? data.map(item => `Code: ${item.Code}, Description: ${item.Description}, Status: ${item.Status}`).join('\n')
+                            : JSON.stringify(data, null, 2);
+                        document.getElementById('formattedTab').innerText = formattedData;
                     } else {
                         document.getElementById('formattedTab').innerText = JSON.stringify(data, null, 2);
                     }
@@ -282,8 +357,6 @@
                 });
         });
     </script>
-    
-
 </body>
 
 </html>

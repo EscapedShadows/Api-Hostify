@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Hostify</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: #f4f4f9;
+            color: #333;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin: 20px 0;
+        }
+
+        .line {
+            width: 100%;
+            border-top: 3px solid #333;
+            margin: 20px 0;
+        }
+
+        .selection,
+        .sessionSelection,
+        .requestData,
+        .endingDiv {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .selectionBtn {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .selectionBtn:disabled {
+            background: #6c757d;
+        }
+
+        .selectionBtn:hover:not(:disabled) {
+            background: #0056b3;
+        }
+
+        .selectionBtn.selected {
+            background: #0056b3;
+        }
+
+        .ip,
+        input,
+        select {
+            width: 200px;
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        #send {
+            background: #28a745;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        #send:hover {
+            background: #218838;
+        }
+
+        .output {
+            background: #e9ecef;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 600px;
+            min-height: 50px;
+            margin-top: 20px;
+        }
+
+        .endingDiv p {
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        .endingDiv a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .endingDiv a:hover {
+            text-decoration: underline;
+        }
+
+        .tabContainer {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .tab {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 5px;
+            transition: background 0.3s;
+        }
+
+        .tab.selected {
+            background: #0056b3;
+        }
+
+        .tabContent {
+            display: none;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 0 0 5px 5px;
+            padding: 20px;
+            width: 100%;
+        }
+
+        .tabContent.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="title">API Hostify | Request Dashboard</h1>
+    <div class="line"></div>
+    <div class="selection">
+        <button id="local" class="selectionBtn" onclick="setMode('local')">Local</button>
+        <button id="extern" class="selectionBtn" onclick="setMode('extern')">Extern</button>
+        <input class="ip" id="ip" placeholder="Enter IP address">
+    </div>
+
+    <div class="sessionSelection">
+        <button id="bucket" class="selectionBtn" onclick="highlightButton('bucket')">Bucket</button>
+        <button id="bin" class="selectionBtn" onclick="highlightButton('bin')" disabled>Bin</button>
+        <button id="container" class="selectionBtn" onclick="highlightButton('container')" disabled>Container</button>
+    </div>
+
+    <select id="modeSelect">
+        <option>Create</option>
+        <option>Delete</option>
+        <option>Set</option>
+        <option>Get</option>
+    </select>
+
+    <div class="requestData">
+        <input id="tokenData" placeholder="Token">
+        <br>
+        <input id="bucketData" placeholder="Bucket">
+        <br>
+        <input id="contentData" placeholder="Request Data" disabled>
+    </div>
+
+    <button id="send">Send Request</button>
+    <div class="tabContainer">
+        <button class="tab selected" onclick="showTab('jsonTab')">JSON</button>
+        <button class="tab" onclick="showTab('formattedTab')">Formatted</button>
+    </div>
+    <div class="output">
+        <div id="jsonTab" class="tabContent active"></div>
+        <div id="formattedTab" class="tabContent"></div>
+    </div>
+
+    <div class="endingDiv">
+        <p>API Hostify. A Free and Open-Source Project by <a href="https://escapedshadows.com">EscapedShadows</a> on <a
+                href="https://github.com/EscapedShadows/Api-Hostify">GitHub</a>.</p>
+    </div>
+
+    <script>
+        document.getElementById('modeSelect').addEventListener('change', function () {
+            console.log('Selected option:', this.value);
+            document.getElementById("contentData").disabled = this.value !== "Set";
+        });
+    
+        function setMode(modeS) {
+            const ipInput = document.getElementById('ip');
+            if (modeS === 'local') {
+                ipInput.value = '127.0.0.1:';
+                ipInput.placeholder = 'Enter port';
+            } else {
+                ipInput.value = '';
+                ipInput.placeholder = 'Enter IP address';
+            }
+            console.log(`Mode set to: ${modeS}`);
+            highlightButton(modeS);
+        }
+    
+        function highlightButton(buttonId) {
+            const buttons = document.querySelectorAll('.selectionBtn');
+            buttons.forEach(button => {
+                button.classList.remove('selected');
+            });
+            document.getElementById(buttonId).classList.add('selected');
+        }
+    
+        function showTab(tabId) {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('selected');
+            });
+            document.querySelector(`.tab[onclick="showTab('${tabId}')"]`).classList.add('selected');
+    
+            const tabContents = document.querySelectorAll('.tabContent');
+            tabContents.forEach(tabContent => {
+                tabContent.classList.remove('active');
+            });
+            document.getElementById(tabId).classList.add('active');
+        }
+    
+        document.getElementById('send').addEventListener('click', function () {
+            const ip = document.getElementById('ip').value;
+            const mode = document.getElementById('modeSelect').value.toLowerCase();
+            const token = document.getElementById('tokenData').value;
+            const bucket = document.getElementById('bucketData').value;
+            const content = document.getElementById('contentData').value;
+    
+            let requestData = {
+                token: token,
+                request: mode,
+                bucket: bucket
+            };
+    
+            if (mode === 'set') {
+                requestData['content'] = content;
+            }
+    
+            fetch(`http://${ip}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('jsonTab').innerText = JSON.stringify(data, null, 2);
+                    if (mode === 'get') {
+                        let formattedOutput = '';
+                        for (const key in data) {
+                            formattedOutput += `${key}: ${data[key]}\n`;
+                        }
+                        document.getElementById('formattedTab').innerText = formattedOutput;
+                    } else {
+                        document.getElementById('formattedTab').innerText = JSON.stringify(data, null, 2);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('jsonTab').innerText = 'Error: ' + error.message;
+                    document.getElementById('formattedTab').innerText = 'Error: ' + error.message;
+                });
+        });
+    </script>
+    
+
+</body>
+
+</html>

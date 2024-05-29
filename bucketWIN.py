@@ -12,7 +12,7 @@ if not os.path.exists('buckets'):
     os.mkdir('buckets')
 
 # Port number for the Flask server
-port = 5000
+port = 5001
 # Tokens allowed for authentication
 tokens = ["mytoken"]
 

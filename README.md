@@ -1,14 +1,14 @@
-SOME FILES ARE NOT THERE YET BE PATIENT!
+SOME FILES ARE NOT AVAILABLE YET. PLEASE BE PATIENT.
 
 # API Hostify
 
-A project by EscapedShadows for **everyone** for **Free**.
+A project by EscapedShadows for **everyone** and completely **Free**.
 
 ---
 
 API Hostify is an open-source project maintained by EscapedShadows, licensed under the Apache 2.0 License.
 
-API Hostify allows anyone to quickly turn any Python-supporting device into a simple JSON API.
+API Hostify enables anyone to quickly transform any Python-supporting device into a simple JSON API.
 
 There are three versions of API Hostify:
 
@@ -16,33 +16,33 @@ There are three versions of API Hostify:
 - Bin
 - Container
 
-Each version has its pros and cons.
+Each version has its own advantages and disadvantages.
 
-Let's go through the versions and see what the differences are!
+Let's explore the versions and understand their differences!
 
 ## Bucket
 
-As you might have already guessed, Bucket utilizes a common way of storing mass JSON data (a bit modified): with something called "Buckets."
+As you might have guessed, Bucket utilizes a common method for storing mass JSON data (slightly modified): with something called "Buckets."
 
-You can imagine it like having a folder with many files named Bucket01.json, Bucket02.json, etc.
+You can imagine it as having a folder with many files named Bucket01.json, Bucket02.json, etc.
 
-It's easy to avoid getting messy with this system but can be difficult to remember where specific data is stored.
+It's easy to keep this system organized, but it can be challenging to remember where specific data is stored.
 
 ## Bin
 
-Basically a bigger version of Bucket that utilizes the original system of Bucket data storage.
+Essentially, Bin is a larger version of Bucket that utilizes the original system of Bucket data storage.
 
-Instead of just having files, each bucket is another folder, which means you can create as many files in one bucket as you want.
+Instead of just having files, each bucket is another folder, allowing you to create as many files in one bucket as you want.
 
-This can lead to some confusion and difficulty finding data (working on a system to export all data in the near future).
+This can lead to some confusion and difficulty in finding data (we are working on a system to export all data in the near future).
 
 ## Container
 
-Whoever uses this either has a small project or hates themselves.
+Container is not a larger version of Bin but rather a mass storage consisting of **one** single JSON file storing **all** of the data. 
 
-Container is not a bigger version of Bin but rather a mass storage consisting of **one** single JSON file storing **all** of the data.
+This system is typically used for smaller projects.
 
-## As you might have already seen in the repository, there are six Python files in total:
+## As you might have noticed in the repository, there are six Python files in total:
 
 - bucketWIN.py
 - binWIN.py
@@ -51,23 +51,23 @@ Container is not a bigger version of Bin but rather a mass storage consisting of
 - binUNIX.py
 - containerUNIX.py
 
-There are different versions for Windows and Linux. Although it would work with one file on both platforms, each version has bug patches specific to the OS so it runs at optimal performance.
+There are different versions for Windows and Linux. Although it would work with one file on both platforms, each version has bug patches specific to the OS for optimal performance.
 
-## So why did I create this project?
+## Why did I create this project?
 
-Because I know what a pain it is to write a simple and clean API, making it work, bug fixing and then the system implementations, writing the documentation, maintaining the project and just cause I like free stuff lmao.
+I created this project because I understand the difficulties of writing a simple and clean API, ensuring it works, fixing bugs, handling system implementations, writing documentation, and maintaining the project. Plus, I enjoy providing free resources.
 
 ---
 
 # Future Plans
 
-In the future, I plan on:
-- Adding a system to export all data of a bucket or of the entire API at once
-- Backups that can be configured
-- Idk I'm not good at planning.. I'm hungry
+In the future, I plan to:
+- Add a system to export all data of a bucket or the entire API at once.
+- Implement configurable backups.
+- Improve planning and development based on user feedback.
 
 ---
 
 # Setup
 
-Please be patient, I'm lazy :3
+Please be patient, as the setup instructions will be provided soon.

@@ -70,4 +70,17 @@ In the future, I plan to:
 
 # Setup
 
+This section is Temporary!
+
+To install a version use
+```bash
+curl -o hostifySetup.py https://raw.githubusercontent.com/EscapedShadows/Api-Hostify/main/{version}{Platform}.py
+```
+
+For Example
+
+```bash
+curl -o containerSetup.py https://raw.githubusercontent.com/EscapedShadows/Api-Hostify/main/containerWIN.py
+```
+
 Please be patient, as the setup instructions will be provided soon.

@@ -42,17 +42,6 @@ Container is not a larger version of Bin but rather a mass storage consisting of
 
 This system is typically used for smaller projects.
 
-## As you might have noticed in the repository, there are six Python files in total:
-
-- bucketWIN.py
-- binWIN.py
-- containerWIN.py
-- bucketUNIX.py
-- binUNIX.py
-- containerUNIX.py
-
-There are different versions for Windows and Linux. Although it would work with one file on both platforms, each version has bug patches specific to the OS for optimal performance.
-
 ## Why did I create this project?
 
 I created this project because I understand the difficulties of writing a simple and clean API, ensuring it works, fixing bugs, handling system implementations, writing documentation, and maintaining the project. Plus, I enjoy providing free resources.
@@ -74,13 +63,13 @@ This section is Temporary!
 
 To install a version use
 ```bash
-curl -o hostifySetup.py https://raw.githubusercontent.com/EscapedShadows/Api-Hostify/main/{version}{Platform}.py
+curl -o hostifySetup.py https://raw.githubusercontent.com/EscapedShadows/Api-Hostify/main/{version}.py
 ```
 
 For Example
 
 ```bash
-curl -o containerSetup.py https://raw.githubusercontent.com/EscapedShadows/Api-Hostify/main/containerWIN.py
+curl -o containerSetup.py https://raw.githubusercontent.com/EscapedShadows/Api-Hostify/main/container.py
 ```
 
 Please be patient, as the setup instructions will be provided soon.

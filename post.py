@@ -1,14 +1,9 @@
-"""
-THE FOLLOWING CODE IS NOT NEEDED AS IT IS JUST A TESTING SCRIPT DURING DEVELOPEMENT
-"""
-import requests
-import json
+from library.request import Bucket
 
-url = "http://127.0.0.1:5001"
 data = {
-    "token": "mytoken",
-    "request": "get",
-    "content": '{"tmp": "tmp"}'
+    "hi": "test"
 }
-response = requests.post(url, json=data)
-print(response.text)
+
+sender = Bucket(token="mytoken", bucketName="mybucket", requestType="create", url="http://192.168.2.128:5001/", content=data).send()
+
+print(sender.text)

@@ -8,13 +8,19 @@ class Bucket():
     
     def send(self):
         import requests
+        import json
+
+        headers = {
+            'Content-Type': 'application/json',
+        }
+
         data = {
             "token": self.token,
-            "content": self.content,
+            "content": json.dumps(self.content),
             "request": self.requestType,
             "bucket": self.bucketName
         }
 
-        response = requests.post(url=self.url, data=data)
+        response = requests.post(url=self.url, data=json.dumps(data), headers=headers)
 
         return response
